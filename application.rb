@@ -25,11 +25,24 @@ get '/' do
   erb :index, :layout => false
 end
 
-get '/set_session' do
-  session.merge!(params)
-  false # show a blank page
+get '/get_session' do
+  # env['rack.session.options'].inspect # session object options including [:id]
+  $pool.inspect # display updated session object
 end
 
-get '/show_session' do
+get '/set_session' do
+  # merege any GET params into the session e.g. ?foo=bar = {"foo" => "bar"}
+  # matching keys will have there values overwritten e.g. ?foo=baz&key=value = {"foo" => "baz", "key" => "value"}
+  session.merge!(params)
+  $pool.inspect
+end
+
+get '/renew_session' do
+  env['rack.session.options'][:renew] = true # new session id, maintains existing session object
+  $pool.inspect
+end
+
+get '/drop_session' do
+  env['rack.session.options'][:drop] = true # new session id, empty session object
   $pool.inspect
 end
