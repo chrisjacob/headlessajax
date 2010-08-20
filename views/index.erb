@@ -8,9 +8,36 @@
 	
 		body{ margin:0px; padding:0px; background:#DDD; }
 		
+		/* Hide for both screenreaders and browsers css-discuss.incutio.com/wiki/Screenreader_Visibility */
+		.hidden { display:none; visibility:hidden; }
+		
+		/* Hide only visually, but have it available for screenreaders
+		www.webaim.org/techniques/css/invisiblecontent/
+		Solution from: j.mp/visuallyhidden - Thanks Jonathan Neal! */
+		.visuallyhidden { position:absolute !important;   
+		clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+		clip: rect(1px, 1px, 1px, 1px); }
+
+		/* Hide visually and from screenreaders, but maintain layout */
+		.invisible { visibility: hidden; }
+		
 	</style>
 </head>
 <body>
+	<noscript>
+		<!-- 
+			Iframe pings a url to start/update a session on the server for this user.
+			The session stores a value named "has_js" with a boolean value of either true or false.
+			The <img> element is a fallback in cases where <iframe> elements are not supported by the browser.
+			
+			In this case we are setting the value to false as we are inside a <noscript> element.
+		-->
+		<iframe class="hidden" src="/set_session?has_js=false"><img class="hidden" src="/set_session?has_js=false" /></iframe>
+	</noscript>
+	<script type="text/javascript">
+		// In this case we are setting the value to true as we are inside a <script> element.
+		document.write('<iframe class="hidden" src="/set_session?has_js=true"><img class="hidden" src="/set_session?has_js=true" /></iframe>');
+	</script>
 	
 	<div style="text-align: center;">
 		<h1>Headless AJAX</h1>
