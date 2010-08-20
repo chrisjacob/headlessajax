@@ -21,7 +21,13 @@ before do
   headers "Content-Type" => 'text/html; charset=utf-8'
 end
 
+
 get '/' do
+  @session_hash = session # make the session hash available in the view
+  @query_hash = params # /?key=value ... { 'key' => 'value' }
+  @query_string = request.query_string # /?key=value ... "key=value"
+  @path = request.path # /somepage/
+  @url = request.url # http://example.com/somepage/?key=value
   erb :index, :layout => false
 end
 
@@ -39,10 +45,14 @@ end
 
 get '/renew_session' do
   env['rack.session.options'][:renew] = true # new session id, maintains existing session object
-  $pool.inspect
 end
 
 get '/drop_session' do
   env['rack.session.options'][:drop] = true # new session id, empty session object
-  $pool.inspect
+end
+
+# a useful testing path
+get %r{(.+)} do |catch_all|
+  return request.inspect;
+  # "I am the catch all #{catch_all}#{request.url}"
 end

@@ -8,18 +8,8 @@
 	
 		body{ margin:0px; padding:0px; background:#DDD; }
 		
-		/* Hide for both screenreaders and browsers css-discuss.incutio.com/wiki/Screenreader_Visibility */
+		/* Hide for both screenreaders and browsers */
 		.hidden { display:none; visibility:hidden; }
-		
-		/* Hide only visually, but have it available for screenreaders
-		www.webaim.org/techniques/css/invisiblecontent/
-		Solution from: j.mp/visuallyhidden - Thanks Jonathan Neal! */
-		.visuallyhidden { position:absolute !important;   
-		clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-		clip: rect(1px, 1px, 1px, 1px); }
-
-		/* Hide visually and from screenreaders, but maintain layout */
-		.invisible { visibility: hidden; }
 		
 	</style>
 </head>
@@ -27,12 +17,25 @@
 	<noscript>
 		<!-- 
 			Iframe pings a url to start/update a session on the server for this user.
-			The session stores a value named "has_js" with a boolean value of either true or false.
+			The session stores a value named "has_js" with a string value of either "true" or "false".
 			The <img> element is a fallback in cases where <iframe> elements are not supported by the browser.
 			
 			In this case we are setting the value to false as we are inside a <noscript> element.
 		-->
 		<iframe class="hidden" src="/set_session?has_js=false"><img class="hidden" src="/set_session?has_js=false" /></iframe>
+		
+		<% if @session_hash.empty? %>
+			<!-- 
+				The session should only be empty the first time this website is hit. 
+				This message should only be seen one time by noscript visitors
+				Script enabled visitors see the page as normal on their first visit
+			-->
+			Javascript is disabled. Please view this page here:
+			<a href="<%= @url %>"><%= @url %></a>
+			
+			<!-- Hide any other page content. -->
+			<div id="hide_page_content" class="hidden">
+		<% end %>
 	</noscript>
 	<script type="text/javascript">
 		// In this case we are setting the value to true as we are inside a <script> element.
@@ -44,6 +47,11 @@
 		<p>The time is now <%= Time.now.strftime("%I:%M %p") %>.</p>
 		<p>We're using Sinatra version <%= Sinatra::VERSION %>.</p>
 		<p>We're using jQuery version <span id="jquery_version">Unknown</span></p>
+		<p>Session hash: <%= @session_hash.inspect %></p>
+		<p>URL: <%= @url %></p>
+		<p>Params hash: <%= @query_hash.inspect %></p>
+		<p>Params string: <%= @query_string %></p>
+		<p>Path: <%= @path %></p>
 	</div>
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
@@ -54,6 +62,12 @@
 			
 		});
 	</script>
+	
+	<noscript>
+		<% if @session_hash.empty? %>
+			</div><!-- #hide_page_content -->
+		<% end %>
+	</noscript>
 </body>
 </html>
 
