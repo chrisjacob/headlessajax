@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Headless AJAX - Demo</title>
+
+	<style type="text/css">
+	
+		body{ margin:0px; padding:0px; background:#DDD; }
+		
+	</style>
+</head>
+<body>
+	
+	<div style="text-align: center;">
+		<h1>Headless AJAX</h1>
+		<p>The time is now <%= Time.now.strftime("%I:%M %p") %>.</p>
+		<p>We're using Sinatra version <%= Sinatra::VERSION %>.</p>
+		<p>We're using jQuery version <span id="jquery_version">Unknown</span></p>
+	</div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		jQuery(document).ready(function($){
+			
+			$('#jquery_version').text($().jquery);
+			
+		});
+	</script>
+</body>
+</html>
+
